@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 
 
+np.random.seed(0)
+
+
 class SKMeans(object):
     def __init__(self, num_clusters, dataset):
         self.num_clusters = num_clusters
@@ -58,11 +61,8 @@ class SKMeans(object):
 def main():
     dataset = pd.read_csv('Mall_Customers.csv')
     dados = dataset.iloc[:, [3, 4]].values
-    k_means = SKMeans(2, np.array([[0, 0],
-                                   [0, 1],
-                                   [1, 0],
-                                   [1, 1]]))
-    k_means.treinar(1)
+    k_means = SKMeans(5, dados)
+    k_means.treinar(0.001)
     print(np.array(k_means.centroides))
 
 
