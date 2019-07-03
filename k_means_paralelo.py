@@ -1,10 +1,11 @@
 from mpi4py import MPI
 import numpy as np
 import pandas as pd
+import time
 
 
-dataset = pd.read_csv('Mall_Customers.csv')
-dados = dataset.iloc[:, [3, 4]].values
+dataset = pd.read_csv('master.csv')
+dados = dataset.iloc[:, [4, 5]].values
 
 
 np.random.seed(0)
@@ -27,7 +28,7 @@ class MKMeans(object):
     def _computar_custo(self):
         custo_total = 0.0
         for centroide in self.centroides:
-            custo_total += np.sum(np.linalg.norm(self.dataset - centroide, axis=0))
+            custo_total += np.sum(np.linalg.norm(self.dataset - centroide, axis=1))
 
         return custo_total
 
@@ -63,8 +64,26 @@ class MKMeans(object):
             if (j_linha - j) < limite:
                 nao_parar_treinamento = False
 
-    def juntar(self, conjunto_centroides):
-        pass
+    @staticmethod
+    def juntar(conjunto_centroides):
+        centroides_finais = []
+        while conjunto_centroides[0]:
+            conjunto_centros = []
+            for conjunto in conjunto_centroides:
+                conjunto_array = np.asarray(conjunto)
+                conjunto_centros.append(np.sum(conjunto_array, axis=0) / len(conjunto_array))
+
+            menor_distancia = None
+            for i in range(len(conjunto_centroides)):
+                distancia = np.sum(np.linalg.norm(np.asarray(conjunto_centroides[i]) - conjunto_centros[i], axis=1))
+                if menor_distancia is None or distancia < menor_distancia:
+                    menor_distancia = distancia
+                    pos_menor_centro = i
+                conjunto_centroides[i].pop(0)
+
+            centroides_finais.append(conjunto_centros[pos_menor_centro])
+
+        return centroides_finais
 
 
 def main():
@@ -72,6 +91,7 @@ def main():
     rank = comm.Get_rank()
     num_processos = comm.Get_size()
     if rank == 0:
+        start = time.time()
         chunk = len(dados) // num_processos
 
         ultimo_processo = num_processos - 1
@@ -89,10 +109,12 @@ def main():
     if rank > 0:
         comm.send(k_means.centroides, dest=0)
     else:
-        conjunto_centroides = k_means.centroides
+        conjunto_centroides = [k_means.centroides]
         for i in range(1, num_processos):
-            conjunto_centroides += comm.recv(source=i)
-        print(np.asarray(conjunto_centroides))
+            conjunto_centroides.append(comm.recv(source=i))
+        print(np.asarray(k_means.juntar(conjunto_centroides)))
+        end = time.time()
+        print(end - start)
 
 
 if __name__ == '__main__':

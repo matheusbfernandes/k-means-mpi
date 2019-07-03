@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 
 
 np.random.seed(0)
@@ -22,7 +23,7 @@ class SKMeans(object):
     def _computar_custo(self):
         custo_total = 0.0
         for centroide in self.centroides:
-            custo_total += np.sum(np.linalg.norm(self.dataset - centroide, axis=0))
+            custo_total += np.sum(np.linalg.norm(self.dataset - centroide, axis=1))
 
         return custo_total
 
@@ -59,11 +60,20 @@ class SKMeans(object):
 
 
 def main():
-    dataset = pd.read_csv('Mall_Customers.csv')
-    dados = dataset.iloc[:, [3, 4]].values
+    # dataset = pd.read_csv('Mall_Customers.csv')
+    # dados = dataset.iloc[:, [3, 4]].values
+    start = time.time()
+    dataset = pd.read_csv('master.csv')
+    dados = dataset.iloc[:, [4, 5]].values
+    tempo_load = time.time()
+
     k_means = SKMeans(5, dados)
     k_means.treinar(0.001)
     print(np.array(k_means.centroides))
+    end = time.time()
+    print(tempo_load - start)
+    print(end - start)
+
 
 
 if __name__ == '__main__':
