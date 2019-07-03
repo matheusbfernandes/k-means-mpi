@@ -4,8 +4,8 @@ import pandas as pd
 import time
 
 
-dataset = pd.read_csv('master.csv')
-dados = dataset.iloc[:, [4, 5]].values
+dataset = pd.read_csv('creditcard.csv')
+dados = dataset.values
 
 
 np.random.seed(0)
@@ -103,7 +103,7 @@ def main():
     else:
         indices = comm.recv(source=0)
 
-    k_means = MKMeans(5, dados[indices[0]:indices[1], :])
+    k_means = MKMeans(4, dados[indices[0]:indices[1], :])
     k_means.treinar(0.001)
 
     if rank > 0:
@@ -112,9 +112,9 @@ def main():
         conjunto_centroides = [k_means.centroides]
         for i in range(1, num_processos):
             conjunto_centroides.append(comm.recv(source=i))
-        print(np.asarray(k_means.juntar(conjunto_centroides)))
+        #print(np.asarray(k_means.juntar(conjunto_centroides)))
         end = time.time()
-        print(end - start)
+        print("Tempo de execucao = " + str(end - start))
 
 
 if __name__ == '__main__':

@@ -52,7 +52,8 @@ class SKMeans(object):
                 novo_centroide = np.zeros(self.dataset.shape[1])
                 for pos_dado in dados_associados_centroide[0]:
                     novo_centroide += self.dataset[pos_dado]
-                self.centroides[i] = novo_centroide / len(dados_associados_centroide[0])
+                if len(dados_associados_centroide[0]) != 0:
+                    self.centroides[i] = novo_centroide / len(dados_associados_centroide[0])
 
             j = self._computar_custo()
             if (j_linha - j) < limite:
@@ -61,20 +62,32 @@ class SKMeans(object):
 
 def main():
     # dataset = pd.read_csv('Mall_Customers.csv')
-    # dados = dataset.iloc[:, [3, 4]].values
-    start = time.time()
-    dataset = pd.read_csv('master.csv')
-    dados = dataset.iloc[:, [4, 5]].values
-    tempo_load = time.time()
+    # 
+    tempos_carregamento = []
+    tempos_totais = []
+    tempos_execucao = []
+    for i in range(10):
+        start = time.time()
+        dataset = pd.read_csv('master.csv')
+        dados = dataset.iloc[:, [4,5, 6]].values
+        tempo_load = time.time()
 
-    k_means = SKMeans(5, dados)
-    k_means.treinar(0.001)
-    print(np.array(k_means.centroides))
-    end = time.time()
-    print(tempo_load - start)
-    print(end - start)
+        k_means = SKMeans(4, dados)
+        k_means.treinar(0.001)
+        #print(np.array(k_means.centroides))
+        end = time.time()
 
+        tempos_carregamento.append(tempo_load - start)
+        tempos_totais.append(end - start)
+        tempos_execucao.append(end - tempo_load)
 
+        print("\nExecucao :{}:".format(i))
+        print("Tempo de carregamento: " + str(tempos_carregamento[i]))
+        print("Tempo de total: " + str(tempos_totais[i]))
+        print("Tempo de execucao: " + str(tempos_execucao[i]))
+    print("\n\nMedia das execucoes = " + str(np.mean(np.array(tempos_execucao))))  
+    print("Media dos tempos totais = " + str(np.mean(np.array(tempos_totais))))
+    print("Media dos tempos de carregamento = " + str(np.mean(np.array(tempos_carregamento))))      
 
 if __name__ == '__main__':
     main()

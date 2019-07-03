@@ -1,0 +1,54 @@
+Execucao :0:
+Tempo de carregamento: 0.005956172943115234
+Tempo de total: 0.0848689079284668
+Tempo de execucao: 0.07891273498535156
+
+Execucao :1:
+Tempo de carregamento: 0.0046880245208740234
+Tempo de total: 0.06846165657043457
+Tempo de execucao: 0.06377363204956055
+
+Execucao :2:
+Tempo de carregamento: 0.0064105987548828125
+Tempo de total: 0.08821964263916016
+Tempo de execucao: 0.08180904388427734
+
+Execucao :3:
+Tempo de carregamento: 0.005043983459472656
+Tempo de total: 0.06774759292602539
+Tempo de execucao: 0.06270360946655273
+
+Execucao :4:
+Tempo de carregamento: 0.0050506591796875
+Tempo de total: 0.04801535606384277
+Tempo de execucao: 0.04296469688415527
+
+Execucao :5:
+Tempo de carregamento: 0.005079030990600586
+Tempo de total: 0.028780698776245117
+Tempo de execucao: 0.02370166778564453
+
+Execucao :6:
+Tempo de carregamento: 0.005289554595947266
+Tempo de total: 0.029122114181518555
+Tempo de execucao: 0.02383255958557129
+
+Execucao :7:
+Tempo de carregamento: 0.005465507507324219
+Tempo de total: 0.1309051513671875
+Tempo de execucao: 0.12543964385986328
+
+Execucao :8:
+Tempo de carregamento: 0.004758596420288086
+Tempo de total: 0.07127690315246582
+Tempo de execucao: 0.06651830673217773
+
+Execucao :9:
+Tempo de carregamento: 0.004795551300048828
+Tempo de total: 0.05233883857727051
+Tempo de execucao: 0.04754328727722168
+
+
+Media das execucoes = 0.0617199182510376
+Media dos tempos totais = 0.06697368621826172
+Media dos tempos de carregamento = 0.0052537679672241214

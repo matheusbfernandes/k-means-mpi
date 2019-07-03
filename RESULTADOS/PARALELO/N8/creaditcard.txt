@@ -1,0 +1,20 @@
+execucao 1
+Tempo de execucao = 278.8691861629486
+execucao 2
+Tempo de execucao = 284.2630114555359
+execucao 3
+Tempo de execucao = 272.18661165237427
+execucao 4
+Tempo de execucao = 280.764372587204
+execucao 5
+Tempo de execucao = 274.29123520851135
+execucao 6
+Tempo de execucao = 275.6686472892761
+execucao 7
+Tempo de execucao = 284.4973464012146
+execucao 8
+Tempo de execucao = 276.360720872879
+execucao 9
+Tempo de execucao = 277.05517983436584
+execucao 10
+Tempo de execucao = 282.5411419868469
