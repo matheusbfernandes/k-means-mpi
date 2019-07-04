@@ -17,3 +17,4 @@ Tempo de execucao = 0.024260759353637695
 execucao 9
 Tempo de execucao = 0.03505659103393555
 execucao 10
+Tempo de execucao = 0.03288374983747987

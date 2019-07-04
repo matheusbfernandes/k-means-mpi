@@ -68,8 +68,8 @@ def main():
     tempos_execucao = []
     for i in range(10):
         start = time.time()
-        dataset = pd.read_csv('master.csv')
-        dados = dataset.iloc[:, [4,5, 6]].values
+        dataset = pd.read_csv('creditcard.csv')
+        dados = dataset.values
         tempo_load = time.time()
 
         k_means = SKMeans(4, dados)

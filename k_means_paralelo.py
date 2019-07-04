@@ -112,7 +112,7 @@ def main():
         conjunto_centroides = [k_means.centroides]
         for i in range(1, num_processos):
             conjunto_centroides.append(comm.recv(source=i))
-        #print(np.asarray(k_means.juntar(conjunto_centroides)))
+        np.asarray(k_means.juntar(conjunto_centroides))
         end = time.time()
         print("Tempo de execucao = " + str(end - start))
 
