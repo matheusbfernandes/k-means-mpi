@@ -11,6 +11,7 @@ dados = dataset.values
 np.random.seed(0)
 
 
+# classe representando o SKMeans, aqui chamado de MKMeans, pois possui uma diferenca que e a funcao juntar (merge) na linha 69
 class MKMeans(object):
     def __init__(self, num_centroides, data_set):
         self.num_centroides = num_centroides
@@ -64,16 +65,23 @@ class MKMeans(object):
             if (j_linha - j) < limite:
                 nao_parar_treinamento = False
 
+    # funcao juntar possui sua versao em pseudocodigo no relatorio.
+    # recebe um conjunto_centroides que consiste em uma lista de lista contendo n*k centroides.
+    # cada sublista consiste na resposta dos k-centroides gerados por cada um dos processos,
+    # estes centroides sao unificados nessa funcao para gerar a resposta final contendo k elementos
     @staticmethod
     def juntar(conjunto_centroides):
         centroides_finais = []
         while conjunto_centroides[0]:
             conjunto_centros = []
+            # para cada sublista calcula o ponto medio e adiciona na outra lista conjunto_centros
             for conjunto in conjunto_centroides:
                 conjunto_array = np.asarray(conjunto)
                 conjunto_centros.append(np.sum(conjunto_array, axis=0) / len(conjunto_array))
 
             menor_distancia = None
+            # encontra qual das sublistas possui a menor distancia interna e adiciona o ponto medio associado a essa
+            # sublista para o conjunto de respostas finais
             for i in range(len(conjunto_centroides)):
                 distancia = np.sum(np.linalg.norm(np.asarray(conjunto_centroides[i]) - conjunto_centros[i], axis=1))
                 if menor_distancia is None or distancia < menor_distancia:
@@ -86,14 +94,20 @@ class MKMeans(object):
         return centroides_finais
 
 
+# funcao main que utiliza MPI para separar o dataset em pedacos menores e envia-los para que todos os processos encontrem k centroides.
+# apos o calculo no dataset parcial os dados sao novamente enviados ao processo de rank 0
+# que realiza a reducao dos n*k centroides para k centroides utilizando a funcao juntar
+# sua versao em pseudocodigo pode ser encontrada no relatorio
 def main():
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     num_processos = comm.Get_size()
     if rank == 0:
         start = time.time()
+        # calcula o pedaco em que cada processo deve trabalha
         chunk = len(dados) // num_processos
 
+        # separa os pedacos em indices que sao enviados aos outros processos
         ultimo_processo = num_processos - 1
         indices = [0, chunk]
         if ultimo_processo > 0:
@@ -103,9 +117,12 @@ def main():
     else:
         indices = comm.recv(source=0)
 
+    # cada processo executa o k-means no pedaco de dataset que recebeu (incluindo o processo de rank 0)
     k_means = MKMeans(4, dados[indices[0]:indices[1], :])
     k_means.treinar(0.001)
 
+    # todos os processos enviam os resultados para o processo de rank 0.
+    # o processo de rank 0 apos receber os dados utiliza a funcao merge para gerar os resultados finais
     if rank > 0:
         comm.send(k_means.centroides, dest=0)
     else:
